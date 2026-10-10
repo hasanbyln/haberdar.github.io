@@ -210,11 +210,29 @@
     .header-action[aria-pressed="true"] { color: #648d25; }
     .filter { cursor: pointer; background: transparent; }
     .filter:hover { border-color: var(--forest); }
+    select.filter { min-height: 32px; padding: 6px 24px 6px 9px; font-family: var(--body); }
     .product-card[hidden] { display: none; }
     .product-empty { grid-column: 1 / -1; padding: 38px 18px; background: var(--white); color: var(--muted); text-align: center; font-size: 13px; }
     .product-status { min-height: 17px; margin: -13px 0 16px; color: var(--muted); font-size: 10px; }
     .save-button[aria-pressed="true"] { color: #c34f42; }
     .save-button[aria-pressed="true"] svg { fill: #f9dcd6; }
+    .product-title { display: block; padding: 0; border: 0; background: transparent; color: var(--ink); text-align: left; cursor: pointer; }
+    .product-title:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .stock-tag { position: absolute; right: 10px; bottom: 10px; padding: 5px 7px; background: rgba(255,255,255,.94); color: #42662a; font-size: 8px; font-weight: 700; }
+    .quick-view { position: absolute; right: 10px; bottom: 10px; left: 10px; min-height: 35px; border: 0; background: rgba(23,35,27,.94); color: white; font-size: 10px; font-weight: 600; opacity: 0; transform: translateY(5px); transition: opacity .18s ease, transform .18s ease; }
+    .product-card:hover .quick-view, .quick-view:focus-visible { opacity: 1; transform: translateY(0); }
+    .rating { margin: 7px 0 0; color: #777d75; font-size: 9px; }
+    .rating span { color: #b47c24; letter-spacing: 0; }
+    .rating small { color: #929890; font-size: 8px; }
+    .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .detail-layout > img { width: 100%; aspect-ratio: 1; object-fit: cover; background: white; }
+    .detail-layout h3 { margin: 5px 0; font: 600 20px/1.2 var(--display); }
+    .detail-layout p:not(.product-type):not(.rating):not(.form-note) { color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .detail-stock { color: #557c2c !important; font-weight: 600; }
+    .detail-price { display: block; margin: 15px 0; font: 700 22px var(--display); }
+    .detail-layout .form-submit { width: 100%; }
+    .account-orders-title { margin: 22px 0 8px; font: 600 13px var(--display); }
+    .order-list { display: grid; gap: 8px; margin: 0; padding-left: 18px; color: var(--muted); font-size: 10px; }
 
     dialog { color: var(--ink); font-family: var(--body); }
     dialog::backdrop { background: rgba(12, 17, 13, .52); backdrop-filter: blur(2px); }
@@ -319,12 +337,20 @@
       .category-arrow { right: 10px; bottom: 12px; width: 23px; height: 23px; }
       .product-toolbar { flex-wrap: wrap; }
       .filter { padding: 7px 9px; }
+      .product-toolbar { gap: 6px; }
+      .product-toolbar .filter-label { display: none; }
+      .product-toolbar select.filter { flex: 1 1 42%; min-width: 0; font-size: 9px; }
       .product-grid { gap: 9px; }
       .product-image { height: 155px; }
       .product-info { padding: 12px 10px; }
       .product-title { min-height: 38px; font-size: 12px; }
       .product-spec { min-height: 40px; margin-bottom: 9px; font-size: 8px; }
       .price { font-size: 15px; }
+      .quick-view { min-height: 30px; opacity: 1; transform: none; font-size: 9px; }
+      .stock-tag { top: 10px; right: auto; bottom: auto; left: 10px; }
+      .product-label { top: 36px; }
+      .detail-layout { grid-template-columns: 1fr; gap: 15px; }
+      .detail-layout > img { max-height: 240px; }
       .feature-band { grid-template-columns: 1fr; }
       .feature-image { min-height: 210px; max-height: 230px; }
       .feature-copy { padding: 31px 22px 36px; }
@@ -368,7 +394,7 @@
     </div>
     <nav class="nav" aria-label="Ana menü">
       <div class="wrap nav-inner">
-        <a href="#urunler" data-category-filter="desktop">Masaüstü PC</a><a href="#urunler" data-category-filter="laptop">Dizüstü</a><a href="#urunler" data-category-filter="components">Bileşenler</a><a href="#urunler" data-category-filter="all">Monitör</a><a href="#urunler" data-category-filter="accessories">Oyuncu ekipmanı</a><a href="#urunler" data-category-filter="accessories">Aksesuar</a><a class="sale" href="#urunler" data-category-filter="sale">Fırsatlar ↗</a>
+        <a href="#urunler" data-category-filter="desktop">Masaüstü PC</a><a href="#urunler" data-category-filter="laptop">Dizüstü</a><a href="#urunler" data-category-filter="components">Bileşenler</a><a href="#urunler" data-category-filter="monitor">Monitör</a><a href="#urunler" data-category-filter="accessories">Oyuncu ekipmanı</a><a href="#urunler" data-category-filter="accessories">Aksesuar</a><a class="sale" href="#urunler" data-category-filter="sale">Fırsatlar ↗</a>
       </div>
     </nav>
   </header>
@@ -378,7 +404,7 @@
       <img class="hero-image" src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=2000&q=88" alt="Özenle toplanmış oyuncu bilgisayarı" fetchpriority="high">
       <div class="hero-shade"></div>
       <div class="hero-content">
-        <div class="eyebrow">NOVA özel seri · 2025</div>
+        <div class="eyebrow">NOVA özel seri · 2026</div>
         <h1 id="hero-title">Gücünü<br><span>serbest bırak.</span></h1>
         <p class="hero-copy">Her parçası dengeli, her detayı düşünülmüş sistemlerle oyunun ritmini sen belirle.</p>
         <div class="hero-bottom">
@@ -405,10 +431,10 @@
           <a class="section-link" href="#urunler">Tüm kategoriler <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
         </div>
         <div class="category-grid">
-          <a class="category" href="#urunler"><img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=700&q=82" alt="Masaüstü bilgisayar" loading="lazy"><span>Masaüstü PC<small>Hazır sistemler</small></span><i class="category-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i></a>
-          <a class="category" href="#urunler"><img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=700&q=82" alt="Dizüstü bilgisayar" loading="lazy"><span>Dizüstü<small>Gücün yanında</small></span><i class="category-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i></a>
-          <a class="category" href="#urunler"><img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=700&q=82" alt="Bilgisayar bileşenleri" loading="lazy"><span>Bileşenler<small>Kendi sistemini kur</small></span><i class="category-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i></a>
-          <a class="category" href="#urunler"><img src="https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=700&q=82" alt="Oyuncu ekipmanı" loading="lazy"><span>Çevre birimleri<small>Detaylarda fark yarat</small></span><i class="category-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i></a>
+          <a class="category" href="#urunler" data-category-filter="desktop"><img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=700&q=82" alt="Masaüstü bilgisayar" loading="lazy"><span>Masaüstü PC<small>Hazır sistemler</small></span><i class="category-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i></a>
+          <a class="category" href="#urunler" data-category-filter="laptop"><img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=700&q=82" alt="Dizüstü bilgisayar" loading="lazy"><span>Dizüstü<small>Gücün yanında</small></span><i class="category-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i></a>
+          <a class="category" href="#urunler" data-category-filter="components"><img src="https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=700&q=82" alt="Bilgisayar bileşenleri" loading="lazy"><span>Bileşenler<small>Kendi sistemini kur</small></span><i class="category-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i></a>
+          <a class="category" href="#urunler" data-category-filter="accessories"><img src="https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=700&q=82" alt="Oyuncu ekipmanı" loading="lazy"><span>Çevre birimleri<small>Detaylarda fark yarat</small></span><i class="category-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></i></a>
         </div>
       </div>
     </section>
@@ -419,7 +445,11 @@
           <div><p class="section-kicker">Editörün seçimi</p><h2>Bu haftanın favorileri</h2></div>
           <a class="section-link" href="#urunler">Tüm ürünler <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
         </div>
-        <div class="product-toolbar" aria-label="Ürün sıralama seçenekleri"><span class="filter-label">Sırala:</span><button class="filter active" type="button" data-sort="featured" aria-pressed="true">Öne çıkanlar</button><button class="filter" type="button" data-sort="popular" aria-pressed="false">Çok satanlar</button><button class="filter" type="button" data-sort="newest" aria-pressed="false">Yeni gelenler</button></div>
+        <div class="product-toolbar" aria-label="Ürün filtreleme ve sıralama">
+          <label class="filter-label" for="categoryFilter">Kategori:</label><select class="filter" id="categoryFilter"><option value="all">Tüm ürünler</option><option value="desktop">Masaüstü PC</option><option value="laptop">Dizüstü</option><option value="components">Bileşenler</option><option value="monitor">Monitör</option><option value="accessories">Aksesuar</option><option value="sale">Fırsatlar</option></select>
+          <label class="filter-label" for="priceFilter">Fiyat:</label><select class="filter" id="priceFilter"><option value="all">Tüm fiyatlar</option><option value="0-5000">5.000 TL altı</option><option value="5000-20000">5.000–20.000 TL</option><option value="20000-50000">20.000–50.000 TL</option><option value="50000-999999">50.000 TL üzeri</option></select>
+          <label class="filter-label" for="sortFilter">Sırala:</label><select class="filter" id="sortFilter"><option value="featured">Öne çıkanlar</option><option value="popular">Çok satanlar</option><option value="newest">Yeni gelenler</option><option value="price-asc">Fiyat: artan</option><option value="price-desc">Fiyat: azalan</option><option value="rating">En yüksek puan</option></select>
+        </div>
         <p class="product-status" aria-live="polite"></p>
         <div class="product-grid">
           <article class="product-card" data-product-id="forge-r7" data-category="desktop" data-sales="98" data-newness="2" data-featured="1" data-promo="true">
@@ -449,7 +479,7 @@
 
     <section class="wrap newsletter" aria-label="E-posta bülteni">
       <div><h2>İyi donanım, iyi haberler.</h2><p>Yeni ürünlerden ve özel fırsatlardan ilk sen haberdar ol.</p></div>
-      <form class="newsletter-form"><input type="email" placeholder="E-posta adresin" aria-label="E-posta adresin" required><button type="submit">Kaydol <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button></form>
+      <form class="newsletter-form"><input name="email" type="email" placeholder="E-posta adresin" aria-label="E-posta adresin" required><button type="submit">Kaydol <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button></form>
     </section>
   </main>
 
@@ -460,7 +490,313 @@
       <div class="footer-col"><h3>Yardım</h3><a href="#">Sipariş takibi</a><a href="#">Teslimat ve iade</a><a href="#">Garanti koşulları</a><a href="#">Sıkça sorulanlar</a></div>
       <div class="footer-col"><h3>NOVA PC</h3><a href="#">Hakkımızda</a><a href="#">İletişim</a><a href="#">Mağazalarımız</a><a href="#">Kariyer</a></div>
     </div>
-    <div class="wrap footer-bottom"><span>© 2025 NOVA PC Studio. Tüm hakları saklıdır.</span><span class="footer-legal"><a href="#">Gizlilik</a><a href="#">Kullanım koşulları</a><a href="#">Çerez tercihleri</a></span></div>
+    <div class="wrap footer-bottom"><span>© 2026 NOVA PC Studio. Tüm hakları saklıdır.</span><span class="footer-legal"><a href="#">Gizlilik</a><a href="#">Kullanım koşulları</a><a href="#">Çerez tercihleri</a></span></div>
   </footer>
+  <dialog class="cart-dialog" id="cartDialog" aria-labelledby="cartTitle">
+    <div class="cart-shell">
+      <div class="dialog-heading"><h2 id="cartTitle">Sepetim <span class="cart-dialog-count"></span></h2><button class="dialog-close" type="button" data-close-dialog aria-label="Sepeti kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-summary"><div class="summary-row"><span>Ara toplam</span><strong id="cartSubtotal">0 TL</strong></div><div class="summary-row"><span>Kargo</span><strong id="cartShipping">0 TL</strong></div><p class="shipping-message" id="shippingMessage"></p><div class="summary-row total"><span>Toplam</span><strong id="cartTotal">0 TL</strong></div><button class="checkout-button" type="button" data-action="order-request">Sipariş talebi oluştur</button><button class="continue-button" type="button" data-close-dialog>Alışverişe devam et</button></div>
+    </div>
+  </dialog>
+  <dialog class="site-dialog" id="siteDialog" aria-labelledby="modalTitle"><div class="modal-content" id="modalContent"></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>
+    (() => {
+      const products = [
+        { id: "forge-r7", category: "desktop", type: "Hazır sistem", title: "Forge R7 · RTX 4070 SUPER", spec: "Ryzen 7 7800X3D · 32 GB DDR5 · 1 TB NVMe", price: 67490, oldPrice: 72999, image: "photo-1587202372775-e229f172b9d7", label: "ÇOK SATAN", rating: 4.9, reviews: 128, stock: 8, sales: 98, newest: 2, featured: 1, promo: true },
+        { id: "core-r5", category: "desktop", type: "Hazır sistem", title: "Core R5 · RTX 4060", spec: "Ryzen 5 7600 · 16 GB DDR5 · 1 TB NVMe", price: 38990, oldPrice: 41999, image: "photo-1587202372775-e229f172b9d7", label: "FIRSAT", rating: 4.8, reviews: 84, stock: 12, sales: 92, newest: 5, featured: 2, promo: true },
+        { id: "studio-i7", category: "desktop", type: "İş istasyonu", title: "Studio i7 · RTX 4070 Ti SUPER", spec: "Core i7-14700KF · 64 GB DDR5 · 2 TB NVMe", price: 94990, oldPrice: null, image: "photo-1591488320449-011701bb6704", label: "PRO SERİ", rating: 4.9, reviews: 37, stock: 4, sales: 48, newest: 7, featured: 3, promo: false },
+        { id: "pulse-16", category: "laptop", type: "Oyuncu dizüstü", title: "Pulse 16 · RTX 4060", spec: "Core i7-14650HX · 16 GB DDR5 · 1 TB SSD", price: 49999, oldPrice: null, image: "photo-1593640408182-31c70c8268f5", label: "YENİ", rating: 4.7, reviews: 52, stock: 9, sales: 72, newest: 1, featured: 4, promo: false },
+        { id: "travel-14", category: "laptop", type: "İnce ve hafif", title: "Travel 14 · Ryzen 7", spec: "Ryzen 7 8840U · 16 GB · 1 TB SSD · 14 inç", price: 34990, oldPrice: 37999, image: "photo-1496181133206-80ce9b88a853", label: "HAFİF TASARIM", rating: 4.6, reviews: 46, stock: 14, sales: 57, newest: 4, featured: 5, promo: true },
+        { id: "rtx-4070-super", category: "components", type: "Ekran kartı", title: "GeForce RTX 4070 SUPER 12 GB", spec: "Üç fanlı soğutma · DLSS 3 · Ray tracing", price: 32899, oldPrice: 35499, image: "photo-1591488320449-011701bb6704", label: "FIRSAT", rating: 4.9, reviews: 96, stock: 7, sales: 84, newest: 3, featured: 6, promo: true },
+        { id: "rtx-4060", category: "components", type: "Ekran kartı", title: "GeForce RTX 4060 8 GB", spec: "Çift fan · DLSS 3 · 115 W TGP", price: 21999, oldPrice: null, image: "photo-1591488320449-011701bb6704", label: "POPÜLER", rating: 4.7, reviews: 113, stock: 16, sales: 91, newest: 8, featured: 7, promo: false },
+        { id: "ryzen-7800x3d", category: "components", type: "İşlemci", title: "AMD Ryzen 7 7800X3D", spec: "8 çekirdek · 16 izlek · AM5 · 120 W", price: 13490, oldPrice: null, image: "photo-1555617981-dac3880eac6e", label: "OYUNCU FAVORİSİ", rating: 4.9, reviews: 174, stock: 11, sales: 96, newest: 6, featured: 8, promo: false },
+        { id: "b650-wifi", category: "components", type: "Anakart", title: "B650M Wi-Fi DDR5", spec: "AM5 · Wi-Fi 6E · 2.5G LAN · PCIe 4.0", price: 8299, oldPrice: null, image: "photo-1591488320449-011701bb6704", label: "", rating: 4.6, reviews: 41, stock: 13, sales: 63, newest: 9, featured: 9, promo: false },
+        { id: "memory-ddr5", category: "components", type: "Bellek", title: "32 GB DDR5 6000 MHz", spec: "2 x 16 GB · AMD EXPO · düşük profilli", price: 4899, oldPrice: null, image: "photo-1591488320449-011701bb6704", label: "", rating: 4.8, reviews: 78, stock: 20, sales: 79, newest: 10, featured: 10, promo: false },
+        { id: "ssd-2tb", category: "components", type: "SSD disk", title: "NVMe Gen4 2 TB SSD", spec: "7.000 MB/sn okuma · M.2 2280 · soğutuculu", price: 5999, oldPrice: 6499, image: "photo-1591488320449-011701bb6704", label: "HIZLI TESLİMAT", rating: 4.8, reviews: 62, stock: 18, sales: 74, newest: 11, featured: 11, promo: true },
+        { id: "monitor-qhd", category: "monitor", type: "Oyuncu monitörü", title: "27 inç QHD 180 Hz IPS", spec: "2560 x 1440 · 1 ms · Adaptive Sync · HDR", price: 12999, oldPrice: 14499, image: "photo-1527443224154-c4a3942d3acf", label: "FIRSAT", rating: 4.7, reviews: 55, stock: 10, sales: 66, newest: 3, featured: 12, promo: true },
+        { id: "monitor-oled", category: "monitor", type: "OLED monitör", title: "34 inç UltraWide OLED 175 Hz", spec: "3440 x 1440 · 0.03 ms · 1800R kavis", price: 28999, oldPrice: null, image: "photo-1527443224154-c4a3942d3acf", label: "PREMIUM", rating: 4.9, reviews: 29, stock: 5, sales: 39, newest: 2, featured: 13, promo: false },
+        { id: "vector-pro", category: "accessories", type: "Oyuncu faresi", title: "Vector Pro Wireless", spec: "26.000 DPI · 59 g ultra hafif · USB-C", price: 3299, oldPrice: null, image: "photo-1527814050087-3793815479db", label: "EDİTÖRÜN SEÇİMİ", rating: 4.8, reviews: 71, stock: 22, sales: 67, newest: 5, featured: 14, promo: false },
+        { id: "keyboard-mech", category: "accessories", type: "Mekanik klavye", title: "Tactile 75 · Türkçe Q", spec: "Hot-swap · RGB · kablosuz ve USB-C", price: 4999, oldPrice: null, image: "photo-1595225476474-87563907a212", label: "YENİ", rating: 4.7, reviews: 34, stock: 15, sales: 51, newest: 1, featured: 15, promo: false },
+        { id: "headset-7", category: "accessories", type: "Oyuncu kulaklığı", title: "Studio H7 Surround", spec: "7.1 surround · 50 mm sürücü · çıkarılabilir mikrofon", price: 3799, oldPrice: 4299, image: "photo-1599669454699-248893623440", label: "FIRSAT", rating: 4.6, reviews: 49, stock: 17, sales: 60, newest: 6, featured: 16, promo: true },
+        { id: "mousepad-xl", category: "accessories", type: "Masa matı", title: "Control XL Desk Mat", spec: "900 x 400 mm · kaymaz taban · dikişli kenar", price: 899, oldPrice: null, image: "photo-1615663245857-ac93bb7c39e7", label: "", rating: 4.5, reviews: 27, stock: 30, sales: 42, newest: 7, featured: 17, promo: false },
+        { id: "webcam-4k", category: "accessories", type: "Web kamera", title: "StreamCam 4K USB", spec: "4K 30 fps · otomatik odak · dahili mikrofon", price: 2699, oldPrice: null, image: "photo-1587825140708-dfaf72ae4b04", label: "", rating: 4.5, reviews: 19, stock: 9, sales: 31, newest: 8, featured: 18, promo: false }
+      ].map(product => ({ ...product, image: `https://images.unsplash.com/${product.image}?auto=format&fit=crop&w=850&q=82` }));
+
+      const readStorage = (key, fallback) => {
+        try {
+          return JSON.parse(localStorage.getItem(key)) ?? fallback;
+        } catch {
+          return fallback;
+        }
+      };
+      const writeStorage = (key, value) => {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+          return true;
+        } catch {
+          showToast("Tarayıcı bu oturumda veriyi saklayamadı.");
+          return false;
+        }
+      };
+      const money = amount => new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY", maximumFractionDigits: 0 }).format(amount);
+      const normalize = value => value.toLocaleLowerCase("tr-TR").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ı/g, "i");
+      const esc = value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[char]);
+      const productMap = new Map(products.map(product => [product.id, product]));
+      const savedCart = readStorage("nova-cart", {});
+      const cart = new Map(Object.entries(savedCart && typeof savedCart === "object" ? savedCart : {}).filter(([id, count]) => productMap.has(id) && Number.isInteger(count) && count > 0));
+      const storedFavorites = readStorage("nova-favorites", []);
+      const favorites = new Set((Array.isArray(storedFavorites) ? storedFavorites : []).filter(id => productMap.has(id)));
+      const grid = document.querySelector(".product-grid");
+      const search = document.querySelector(".search input");
+      const categoryFilter = document.querySelector("#categoryFilter");
+      const priceFilter = document.querySelector("#priceFilter");
+      const sortFilter = document.querySelector("#sortFilter");
+      const cartDialog = document.querySelector("#cartDialog");
+      const siteDialog = document.querySelector("#siteDialog");
+      const modal = document.querySelector("#modalContent");
+      const toast = document.querySelector("#toast");
+      let favoritesOnly = false;
+      let toastTimer;
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("visible");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("visible"), 2800);
+      }
+      function persistShopping() {
+        writeStorage("nova-cart", Object.fromEntries(cart));
+        writeStorage("nova-favorites", [...favorites]);
+      }
+      function makeCard(product) {
+        const oldPrice = product.oldPrice ? `<span class="old-price">${money(product.oldPrice)}</span>` : "";
+        const label = product.label ? `<span class="product-label">${esc(product.label)}</span>` : "";
+        const favoriteLabel = favorites.has(product.id) ? "Favorilerden çıkar" : "Favorilere ekle";
+        return `<article class="product-card" data-product-id="${product.id}"><div class="product-image"><img src="${product.image}" alt="${esc(product.title)}" loading="lazy"><span class="stock-tag">${product.stock > 5 ? "STOKTA" : "SON " + product.stock + " ADET"}</span>${label}<button class="save-button" type="button" data-favorite="${product.id}" aria-label="${favoriteLabel}" aria-pressed="${favorites.has(product.id)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 8.8c0 5.2-8.8 10.1-8.8 10.1S3.2 14 3.2 8.8A4.5 4.5 0 0 1 12 6.5a4.5 4.5 0 0 1 8.8 2.3Z"/></svg></button><button class="quick-view" type="button" data-detail="${product.id}">Ürünü incele</button></div><div class="product-info"><p class="product-type">${esc(product.type)}</p><button class="product-title" type="button" data-detail="${product.id}">${esc(product.title)}</button><div class="rating"><span aria-label="${product.rating} üzerinden 5 yıldız">★★★★★</span> ${product.rating.toFixed(1)} <small>(${product.reviews})</small></div><p class="product-spec">${esc(product.spec)}</p><div class="product-meta"><div>${oldPrice}<span class="price">${money(product.price)}</span><span class="installment">6 aya varan taksit görünümü</span></div><button class="add-button" type="button" data-add="${product.id}" aria-label="${esc(product.title)} sepete ekle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div></article>`;
+      }
+      function renderProducts() {
+        const query = normalize(search.value.trim());
+        const category = categoryFilter.value;
+        const range = priceFilter.value === "all" ? null : priceFilter.value.split("-").map(Number);
+        const sorters = {
+          featured: (a, b) => a.featured - b.featured,
+          popular: (a, b) => b.sales - a.sales,
+          newest: (a, b) => a.newest - b.newest,
+          "price-asc": (a, b) => a.price - b.price,
+          "price-desc": (a, b) => b.price - a.price,
+          rating: (a, b) => b.rating - a.rating || b.reviews - a.reviews
+        };
+        const shown = products.filter(product => {
+          const matchesText = normalize(`${product.title} ${product.type} ${product.spec}`).includes(query);
+          const matchesCategory = category === "all" || category === "sale" ? (category === "all" || product.promo) : product.category === category;
+          const matchesPrice = !range || product.price >= range[0] && product.price <= range[1];
+          const matchesFavorite = !favoritesOnly || favorites.has(product.id);
+          return matchesText && matchesCategory && matchesPrice && matchesFavorite;
+        }).sort(sorters[sortFilter.value]);
+        grid.innerHTML = shown.map(makeCard).join("");
+        document.querySelector(".product-status").textContent = `${shown.length} ürün listeleniyor${favoritesOnly ? " · Favorilerim" : ""}`;
+        if (!shown.length) grid.innerHTML = '<p class="product-empty">Aramana uygun ürün bulunamadı. Filtreleri temizleyip tekrar dene.</p>';
+        document.querySelector(".wishlist-count").textContent = favorites.size;
+        document.querySelector('[data-action="favorites"]').setAttribute("aria-pressed", String(favoritesOnly));
+      }
+      function renderCart() {
+        const itemHost = document.querySelector("#cartItems");
+        const count = [...cart.values()].reduce((total, quantity) => total + quantity, 0);
+        const subtotal = [...cart].reduce((total, [id, quantity]) => total + productMap.get(id).price * quantity, 0);
+        const shipping = subtotal === 0 || subtotal >= 3000 ? 0 : 99;
+        document.querySelector(".cart-count").textContent = count;
+        document.querySelector(".cart-dialog-count").textContent = `(${count})`;
+        document.querySelector("#cartSubtotal").textContent = money(subtotal);
+        document.querySelector("#cartShipping").textContent = shipping ? money(shipping) : "Ücretsiz";
+        document.querySelector("#cartTotal").textContent = money(subtotal + shipping);
+        document.querySelector("#shippingMessage").textContent = subtotal >= 3000 ? "Siparişinde kargo ücretsiz." : `Ücretsiz kargoya ${money(3000 - subtotal)} kaldı.`;
+        document.querySelector("[data-action=order-request]").disabled = count === 0;
+        if (!count) {
+          itemHost.innerHTML = '<div class="cart-empty"><strong>Sepetin boş.</strong>İlgini çeken ürünleri ekleyerek başlayabilirsin.</div>';
+          return;
+        }
+        itemHost.innerHTML = [...cart].map(([id, quantity]) => {
+          const product = productMap.get(id);
+          return `<article class="cart-item"><img src="${product.image}" alt="${esc(product.title)}"><div><h3>${esc(product.title)}</h3><span class="cart-item-price">${money(product.price * quantity)}</span><div class="quantity-control"><button type="button" data-quantity="-1" data-id="${id}" aria-label="Adedi azalt">−</button><span>${quantity}</span><button type="button" data-quantity="1" data-id="${id}" aria-label="Adedi artır">+</button></div></div><button class="remove-item" type="button" data-remove="${id}">Kaldır</button></article>`;
+        }).join("");
+      }
+      function openModal(title, content) {
+        modal.innerHTML = `<div class="dialog-heading"><h2 id="modalTitle">${title}</h2><button class="dialog-close" type="button" data-close-dialog aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>${content}`;
+        siteDialog.showModal();
+      }
+      function showProduct(id) {
+        const product = productMap.get(id);
+        if (!product) return;
+        openModal("Ürün detayları", `<div class="detail-layout"><img src="${product.image.replace("w=850", "w=1200")}" alt="${esc(product.title)}"><div><p class="product-type">${esc(product.type)}</p><h3>${esc(product.title)}</h3><p class="rating"><span>★★★★★</span> ${product.rating} <small>(${product.reviews} değerlendirme)</small></p><p>${esc(product.spec)}</p><p class="detail-stock">${product.stock > 5 ? "Stokta · Kargoya hazır" : `Son ${product.stock} adet`}</p><strong class="detail-price">${money(product.price)}</strong><p class="form-note">Fiyat bilgisi demo amaçlıdır. Bu sitede ödeme alınmaz.</p><button class="form-submit" type="button" data-add="${product.id}" data-close-after-add>Sepete ekle</button></div></div>`);
+      }
+      function showAccount() {
+        const profile = readStorage("nova-profile", {});
+        const orders = readStorage("nova-orders", []);
+        const orderRows = Array.isArray(orders) && orders.length ? orders.map(order => `<li><strong>${esc(order.id)}</strong> · ${esc(order.date)} · ${money(order.total)} · Talep alındı</li>`).join("") : "<li>Henüz sipariş talebin yok.</li>";
+        openModal("Hesabım", `<p class="modal-intro">İletişim bilgilerini sakla ve bu cihazdan oluşturduğun sipariş taleplerini görüntüle.</p><form class="modal-form" id="accountForm"><label class="form-field">Ad soyad<input name="name" autocomplete="name" value="${esc(profile.name || "")}" required></label><label class="form-field">E-posta<input name="email" type="email" autocomplete="email" value="${esc(profile.email || "")}" required></label><button class="form-submit">Bilgilerimi kaydet</button></form><h3 class="account-orders-title">Sipariş taleplerim</h3><ul class="order-list">${orderRows}</ul><p class="form-note">Bu demo, hesabı ve sipariş kayıtlarını yalnızca bu tarayıcıda saklar.</p>`);
+      }
+      function showOrderRequest() {
+        const profile = readStorage("nova-profile", {});
+        const total = [...cart].reduce((sum, [id, quantity]) => sum + productMap.get(id).price * quantity, 0);
+        const shipping = total >= 3000 ? 0 : 99;
+        openModal("Sipariş talebi", `<p class="modal-intro">Ürünlerini ayırma talebin oluşturulsun; ekibimiz detayları teyit etmek için sana ulaşsın. Bu adımda ödeme alınmaz.</p><div class="summary-row total"><span>Talep tutarı</span><strong>${money(total + shipping)}</strong></div><form class="modal-form" id="orderForm"><label class="form-field">Ad soyad<input name="name" autocomplete="name" value="${esc(profile.name || "")}" required></label><label class="form-field">E-posta<input name="email" type="email" autocomplete="email" value="${esc(profile.email || "")}" required></label><label class="form-field">Telefon<input name="phone" type="tel" autocomplete="tel" required></label><label class="form-field">Teslimat adresi<textarea name="address" autocomplete="street-address" required></textarea></label><button class="form-submit">Ödemesiz talep oluştur</button></form><p class="form-note">Kart bilgisi istenmez. Talep bu tarayıcıda demo olarak saklanır, mağazaya iletilmez.</p>`);
+      }
+      function showHelp(topic) {
+        if (topic === "Sipariş takibi") {
+          openModal(topic, `<p class="modal-intro">Bu tarayıcıda oluşturulmuş demo sipariş talebini numara veya e-posta adresiyle ara.</p><form class="modal-form" id="trackForm"><label class="form-field">Sipariş numarası ya da e-posta<input name="query" autocomplete="off" placeholder="NV-1234567 veya e-posta" required></label><button class="form-submit">Talebi bul</button></form><div id="trackResult" class="form-note" aria-live="polite"></div>`);
+          return;
+        }
+        if (topic === "İletişim") {
+          openModal(topic, `<p class="modal-intro">Bize ulaşmak için mesaj bırak. Demo mesajı bu cihazda saklanır, gönderilmez.</p><form class="modal-form" id="contactForm"><label class="form-field">Adın<input name="name" required></label><label class="form-field">E-posta<input name="email" type="email" required></label><label class="form-field">Mesajın<textarea name="message" required></textarea></label><button class="form-submit">Demo mesajı kaydet</button></form>`);
+          return;
+        }
+        const pages = {
+          "Teslimat ve iade": `<p class="modal-intro">Demo mağaza bilgilendirmesi</p><p>Stokta bulunan ürünler için örnek teslimat süresi 1–3 iş günüdür. İade talepleri teslimattan sonraki 14 gün içinde alınır. Gerçek sipariş ve iade işlemi için mağaza altyapısı gerekir.</p>`,
+          "Garanti koşulları": `<p class="modal-intro">Ürün garanti bilgisi ürün kutusu ve üretici koşullarına göre değişir.</p><p>Hazır sistemlerde örnek 3 yıl, bileşen ve çevre birimlerinde üretici garantisi gösterilir. Bu demo gerçek garanti veya servis kaydı oluşturmaz.</p>`,
+          "Sıkça sorulanlar": `<h3>Ürünler orijinal mi?</h3><p>Bu sayfadaki ürünler ve stok bilgileri örnek katalog verileridir.</p><h3>Ödeme yapabilir miyim?</h3><p>Hayır. Bu sürümde ödeme alınmaz; sepetten yalnızca yerel bir sipariş talebi oluşturulur.</p><h3>Sipariş talebimi nereden izlerim?</h3><p>Hesabım bölümünde veya Sipariş takibi bağlantısından, bu cihazda oluşturduğun talepleri bulabilirsin.</p>`,
+          "Hakkımızda": `<p>NOVA PC Studio, donanım alışverişi için hazırlanmış örnek bir mağaza deneyimidir. Ürün kataloğu, fiyatlar ve mağaza bilgileri demo amaçlıdır.</p>`,
+          "Mağazalarımız": `<p>Bu demo mağazanın fiziksel şubesi bulunmuyor. Adres veya harita bilgisi gerçek mağaza konumu olarak kullanılmamalıdır.</p>`,
+          "Kariyer": `<p>NOVA PC Studio demo arayüzüdür; açık pozisyon veya işe alım süreci bulunmuyor.</p>`,
+          "Gizlilik": `<p>Arama ve filtreleme verileri gönderilmez. Sepet, favoriler, demo profil ve sipariş talepleri yalnızca bu tarayıcının yerel depolamasında tutulur.</p>`,
+          "Kullanım koşulları": `<p>Ürünler, fiyatlar, stok ve sipariş bilgileri örnek amaçlıdır. Bu siteden gerçek satış, rezervasyon veya sözleşme kurulmaz.</p>`,
+          "Çerez tercihleri": `<p class="modal-intro">Bu demo çerez veya analiz hizmeti yüklemez. Tercihlerini bu tarayıcıda saklayabilirsin.</p><form class="modal-form" id="cookieForm"><label><input type="checkbox" checked disabled> Gerekli yerel kayıtlar</label><label><input type="checkbox" name="analytics"> Kullanım analizi</label><label><input type="checkbox" name="marketing"> Kişiselleştirme</label><button class="form-submit">Tercihleri kaydet</button></form>`
+        };
+        openModal(topic, pages[topic] || `<p>Bu sayfa demo mağaza kapsamına dahil değildir.</p>`);
+      }
+
+      grid.innerHTML = products.map(makeCard).join("");
+      document.querySelectorAll(".nav [data-category-filter]").forEach(link => link.addEventListener("click", event => {
+        event.preventDefault();
+        favoritesOnly = false;
+        categoryFilter.value = link.dataset.categoryFilter;
+        renderProducts();
+        document.querySelector("#urunler").scrollIntoView({ behavior: "smooth" });
+      }));
+      document.querySelectorAll(".category").forEach((link, index) => {
+        const categories = ["desktop", "laptop", "components", "accessories"];
+        link.dataset.categoryFilter ||= categories[index];
+      });
+      document.querySelectorAll(".category").forEach(link => link.addEventListener("click", event => {
+        event.preventDefault();
+        categoryFilter.value = link.dataset.categoryFilter;
+        favoritesOnly = false;
+        renderProducts();
+        document.querySelector("#urunler").scrollIntoView({ behavior: "smooth" });
+      }));
+      [search, categoryFilter, priceFilter, sortFilter].forEach(control => control.addEventListener("input", () => { favoritesOnly = false; renderProducts(); }));
+      document.addEventListener("click", event => {
+        const action = event.target.closest("[data-action]");
+        if (action?.dataset.action === "cart") { renderCart(); cartDialog.showModal(); return; }
+        if (action?.dataset.action === "account") { showAccount(); return; }
+        if (action?.dataset.action === "favorites") {
+          favoritesOnly = !favoritesOnly;
+          categoryFilter.value = "all";
+          priceFilter.value = "all";
+          renderProducts();
+          document.querySelector("#urunler").scrollIntoView({ behavior: "smooth" });
+          return;
+        }
+        if (action?.dataset.action === "order-request") { if (cart.size) showOrderRequest(); return; }
+        const footerLink = event.target.closest(".footer-col a[href='#'], .footer-legal a[href='#']");
+        if (footerLink) { event.preventDefault(); showHelp(footerLink.textContent.trim()); return; }
+        const allProducts = event.target.closest(".section-link[href='#urunler']");
+        if (allProducts) {
+          event.preventDefault();
+          categoryFilter.value = "all"; priceFilter.value = "all"; favoritesOnly = false;
+          renderProducts(); document.querySelector("#urunler").scrollIntoView({ behavior: "smooth" }); return;
+        }
+        const close = event.target.closest("[data-close-dialog]");
+        if (close) { close.closest("dialog").close(); return; }
+        const detail = event.target.closest("[data-detail]");
+        if (detail) { showProduct(detail.dataset.detail); return; }
+        const add = event.target.closest("[data-add]");
+        if (add) {
+          const product = productMap.get(add.dataset.add);
+          cart.set(product.id, Math.min(product.stock, (cart.get(product.id) || 0) + 1));
+          persistShopping();
+          renderCart();
+          if (add.hasAttribute("data-close-after-add")) siteDialog.close();
+          showToast("Ürün sepetine eklendi.");
+          return;
+        }
+        const favorite = event.target.closest("[data-favorite]");
+        if (favorite) {
+          favorites.has(favorite.dataset.favorite) ? favorites.delete(favorite.dataset.favorite) : favorites.add(favorite.dataset.favorite);
+          persistShopping();
+          renderProducts();
+          showToast(favorites.has(favorite.dataset.favorite) ? "Favorilerine eklendi." : "Favorilerinden çıkarıldı.");
+          return;
+        }
+        const quantityButton = event.target.closest("[data-quantity]");
+        if (quantityButton) {
+          const id = quantityButton.dataset.id;
+          const next = (cart.get(id) || 0) + Number(quantityButton.dataset.quantity);
+          if (next <= 0) cart.delete(id); else cart.set(id, Math.min(productMap.get(id).stock, next));
+          persistShopping(); renderCart(); return;
+        }
+        const removeButton = event.target.closest("[data-remove]");
+        if (removeButton) { cart.delete(removeButton.dataset.remove); persistShopping(); renderCart(); }
+      });
+      document.addEventListener("submit", event => {
+        if (event.target.id === "accountForm") {
+          event.preventDefault();
+          const fields = new FormData(event.target);
+          writeStorage("nova-profile", { name: fields.get("name").trim(), email: fields.get("email").trim() });
+          siteDialog.close(); showToast("Profil bilgilerin bu tarayıcıya kaydedildi.");
+        }
+        if (event.target.id === "orderForm") {
+          event.preventDefault();
+          const fields = new FormData(event.target);
+          const orders = readStorage("nova-orders", []);
+          const order = { id: `NV-${Date.now().toString().slice(-7)}`, name: fields.get("name").trim(), email: fields.get("email").trim(), phone: fields.get("phone").trim(), address: fields.get("address").trim(), items: Object.fromEntries(cart), total: [...cart].reduce((sum, [id, quantity]) => sum + productMap.get(id).price * quantity, 0), date: new Intl.DateTimeFormat("tr-TR").format(new Date()), status: "Talep alındı" };
+          const savedOrders = Array.isArray(orders) ? orders : [];
+          savedOrders.unshift(order);
+          writeStorage("nova-orders", savedOrders);
+          writeStorage("nova-profile", { name: order.name, email: order.email });
+          modal.innerHTML = `<div class="order-success"><div class="order-success-mark">✓</div><h2>Talebin alındı</h2><p><strong>${order.id}</strong><br>Ödeme alınmadı. Demo talep bu tarayıcıya kaydedildi; gerçek mağazaya iletilmedi.</p><button class="form-submit" type="button" data-close-dialog>Tamam</button></div>`;
+          cart.clear(); persistShopping(); renderCart();
+        }
+        if (event.target.id === "trackForm") {
+          event.preventDefault();
+          const query = new FormData(event.target).get("query").trim().toLocaleLowerCase("tr-TR");
+          const orders = readStorage("nova-orders", []);
+          const order = (Array.isArray(orders) ? orders : []).find(item => item.id.toLocaleLowerCase("tr-TR") === query || item.email.toLocaleLowerCase("tr-TR") === query);
+          const result = document.querySelector("#trackResult");
+          result.textContent = order ? `${order.id} · ${order.date} · Talep alındı. Bu kayıt bu tarayıcıdaki demo talebidir.` : "Bu tarayıcıda eşleşen demo sipariş talebi bulunamadı.";
+        }
+        if (event.target.id === "contactForm") {
+          event.preventDefault();
+          const messages = readStorage("nova-messages", []);
+          const list = Array.isArray(messages) ? messages : [];
+          const fields = new FormData(event.target);
+          list.push({ name: fields.get("name").trim(), email: fields.get("email").trim(), message: fields.get("message").trim(), date: Date.now() });
+          writeStorage("nova-messages", list);
+          siteDialog.close(); showToast("Demo mesajı bu tarayıcıda kaydedildi, gönderilmedi.");
+        }
+        if (event.target.id === "cookieForm") {
+          event.preventDefault();
+          const fields = new FormData(event.target);
+          writeStorage("nova-consent", { analytics: fields.has("analytics"), marketing: fields.has("marketing") });
+          siteDialog.close(); showToast("Tercihlerin bu tarayıcıya kaydedildi.");
+        }
+        if (event.target.matches(".newsletter-form")) {
+          event.preventDefault();
+          const data = new FormData(event.target);
+          const value = data.get("email").trim().toLowerCase();
+          const saved = readStorage("nova-newsletters", []);
+          const subscribers = new Set(Array.isArray(saved) ? saved : []);
+          subscribers.add(value);
+          writeStorage("nova-newsletters", [...subscribers]);
+          event.target.reset(); showToast("Bülten kaydı bu tarayıcıda demo olarak saklandı.");
+        }
+      });
+      cartDialog.addEventListener("click", event => { if (event.target === cartDialog) cartDialog.close(); });
+      siteDialog.addEventListener("click", event => { if (event.target === siteDialog) siteDialog.close(); });
+      renderProducts();
+      renderCart();
+    })();
+  </script>
 </body>
 </html>
